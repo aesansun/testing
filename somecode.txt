@@ -1,1 +1,5 @@
-this is some code
+---
+# vars file for tempuser
+
+USER: tempuser
+PASSWORD: n8WsbkU43zTVXbnYdwFd
