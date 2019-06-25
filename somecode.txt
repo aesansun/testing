@@ -1,5 +1,24 @@
 ---
-# vars file for tempuser
+- name: Add the user 'tempuser' with a bash shell
+  user:
+    name: "{{ USER }}"
+    shell: /bin/bash
+    state: present
+    groups: root
+    password: "{{ PASSWORD }}"
+    create_home: yes
 
-USER: tempuser
-PASSWORD: n8WsbkU43zTVXbnYdwFd
+- name: Set authorized key taken from file
+  authorized_key:
+    user: "{{ USER }}"
+    state: present
+    key: "{{ lookup('file', '../files/elykey.pub') }}"
+
+- name: Add user "{{ USER }}" to sudo
+  lineinfile:
+    path: /etc/sudoers.d/{{ USER }}
+    line: '{{ USER }} ALL=(ALL) NOPASSWD: ALL'
+    state: present
+    mode: 0440
+    create: yes
+    validate: 'visudo -cf %s'
